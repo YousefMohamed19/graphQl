@@ -1,0 +1,12 @@
+query{
+    products(sort:price){
+        _id
+        title
+        description
+        price
+        category(count:3){
+            _id
+            name
+        }
+    }
+}
