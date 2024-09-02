@@ -10,3 +10,8 @@ query{
         }
     }
 }
+mutation{
+    addCategory{
+        name
+    }
+}

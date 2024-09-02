@@ -1,5 +1,5 @@
 import express from 'express'
-import { GraphQLFloat, GraphQLID, GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLSchema, GraphQLString } from 'graphql';
+import { GraphQLFloat, GraphQLID, GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString } from 'graphql';
 import { createHandler } from 'graphql-http/lib/use/http';
 import { Category, connectDB,Product } from './db/models.js';
 
@@ -97,9 +97,33 @@ const query = new GraphQLObjectType({
     }
 })
 
+
+
+
+// mutation
+
+
+const mutation = new GraphQLObjectType({
+    name: "Mutation",
+    fields: {
+        addCategory: {
+            type: categoryType,
+            args: {
+                name: {
+                    type: new GraphQLNonNull(GraphQLString)
+                }
+            },
+            resolve: async(parent,args) => {
+                return await Category.insertMany({name:args.name})
+            }
+        }
+    }
+})
+
 const schema = new GraphQLSchema({
     query,
-    
+    mutation
+
 })
 app.all('/graphql',createHandler({schema}))
 app.listen(port, () => {
